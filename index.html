@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script>
+  // Script Satpam: Kalau belum login, tendang ke halaman login
+  if (!localStorage.getItem('userRole')) {
+      window.location.href = 'login.html';
+  }
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kyky Store - Beranda</title>
@@ -97,4 +103,5 @@
         }
     </script>
 </body>
+
 </html>
