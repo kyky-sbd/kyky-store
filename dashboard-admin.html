@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Kyky Store</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
+        @keyframes glow {
+            0%, 100% { border-color: #2563eb; box-shadow: 0 0 5px #2563eb33; }
+            50% { border-color: #93c5fd; box-shadow: 0 0 20px #2563eb66; }
+        }
+        .preview-glow { border: 4px dashed #2563eb; animation: glow 2s infinite; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div class="bg-white p-10 md:p-14 rounded-[4rem] shadow-2xl border border-slate-100">
+            <h2 class="text-3xl font-black text-blue-600 italic tracking-tighter mb-1">Tambah Barang Baru</h2>
+            <p class="text-slate-400 font-bold text-[10px] uppercase tracking-[0.3em] mb-10">Kelola Stok Kyky Store</p>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase ml-6 mb-2">Nama Produk</label>
+                    <input type="text" id="name" oninput="updateLivePreview()" placeholder="Contoh: Nike Air Max..." class="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white outline-none rounded-3xl px-8 py-5 font-bold transition-all">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase ml-6 mb-2">Harga (RP)</label>
+                        <input type="number" id="price" oninput="updateLivePreview()" placeholder="50000" class="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white outline-none rounded-3xl px-8 py-5 font-bold transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase ml-6 mb-2">Kategori</label>
+                        <select id="category" onchange="updateLivePreview()" class="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white outline-none rounded-3xl px-8 py-5 font-bold transition-all appearance-none cursor-pointer">
+                            <option value="Elektronik">📱 Elektronik</option>
+                            <option value="Fashion">👕 Fashion</option>
+                            <option value="Makanan">🍲 Makanan</option>
+                            <option value="Otomotif">🚗 Otomotif</option>
+                            <option value="Hobi">🎨 Hobi</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase ml-6 mb-2">Link Gambar</label>
+                    <input type="text" id="image" oninput="updateLivePreview()" placeholder="https://link-gambar.com/foto.jpg" class="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white outline-none rounded-3xl px-8 py-5 font-bold transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase ml-6 mb-2">Lokasi Kota</label>
+                    <input type="text" id="location" oninput="updateLivePreview()" placeholder="Batam, Kepri" class="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white outline-none rounded-3xl px-8 py-5 font-bold transition-all">
+                </div>
+
+                <button onclick="saveToLibrary()" class="w-full bg-blue-600 text-white py-6 rounded-[2.5rem] font-black text-xl shadow-xl shadow-blue-100 hover:scale-[1.02] active:scale-95 transition-all mt-4">
+                    PUBLISH BARANG SEKARANG
+                </button>
+                
+                <a href="index.html" class="block text-center text-slate-400 font-bold text-[10px] uppercase tracking-widest mt-6 hover:text-blue-600 transition">Kembali ke Beranda</a>
+            </div>
+        </div>
+
+        <div class="sticky top-12">
+            <div class="flex items-center gap-2 mb-6 ml-6 text-slate-400 font-black text-xs uppercase tracking-[0.3em]">
+                <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span> Live Preview Tampilan
+            </div>
+            <div class="preview-glow bg-white p-8 rounded-[3.5rem] relative">
+                <div class="h-80 rounded-[2.5rem] overflow-hidden bg-slate-100 mb-6">
+                    <img id="p-img" src="https://via.placeholder.com/400x400?text=Foto+Produk" class="w-full h-full object-cover">
+                </div>
+                <div class="px-2">
+                    <span id="p-cat" class="bg-blue-600 text-white px-5 py-1.5 rounded-full text-[10px] font-black uppercase italic tracking-widest shadow-lg shadow-blue-200">KATEGORI</span>
+                    <p id="p-loc" class="text-[10px] text-blue-500 font-bold uppercase mt-3 flex items-center gap-1">📍 Batam, Kepri</p>
+                    <h4 id="p-name" class="text-3xl font-black text-slate-800 mt-2 mb-2 italic tracking-tighter">Nama Produk Kamu</h4>
+                    <p id="p-price" class="text-blue-600 font-black text-4xl tracking-tighter">Rp 0</p>
+                </div>
+                <div class="absolute top-6 right-6 bg-yellow-400 text-[10px] font-black px-4 py-1 rounded-full animate-bounce shadow-sm">CONTOH</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    // Cek apakah yang masuk benar-benar admin
+    const role = localStorage.getItem('userRole');
+    if (role !== 'admin') {
+        // Jika bukan admin, tendang balik ke login
+        window.location.href = 'login.html';
+    }
+});
+        function updateLivePreview() {
+            const name = document.getElementById('name').value || "Nama Produk Kamu";
+            const price = parseInt(document.getElementById('price').value) || 0;
+            const category = document.getElementById('category').value;
+            const image = document.getElementById('image').value || "https://via.placeholder.com/400x400?text=Foto+Produk";
+            const location = document.getElementById('location').value || "Batam, Kepri";
+
+            document.getElementById('p-name').innerText = name;
+            document.getElementById('p-price').innerText = "Rp " + price.toLocaleString('id-ID');
+            document.getElementById('p-cat').innerText = category.toUpperCase();
+            document.getElementById('p-img').src = image;
+            document.getElementById('p-loc').innerText = "📍 " + location;
+        }
+
+        function saveToLibrary() {
+    const name = document.getElementById('name').value;
+    const price = document.getElementById('price').value;
+    const category = document.getElementById('category').value;
+    const image = document.getElementById('image').value;
+    const location = document.getElementById('location').value || "Batam, Kepri";
+
+    if (name && price && image) {
+        // 1. Ambil data lama
+        let products = JSON.parse(localStorage.getItem('products')) || [];
+        
+        // 2. Tambah data baru
+        products.push({ name, price, category, image, location });
+        
+        // 3. Simpan kembali ke localStorage
+        localStorage.setItem('products', JSON.stringify(products));
+
+        Swal.fire({
+            title: 'Berhasil Publish! ✨',
+            icon: 'success',
+            confirmButtonColor: '#2563eb'
+        }).then(() => {
+            // Pindah ke beranda untuk melihat hasilnya
+            window.location.href = 'index.html';
+        });
+    } else {
+        Swal.fire({ icon: 'error', title: 'Isi semua data dulu!' });
+    }
+}
+    </script>
+</body>
+</html>

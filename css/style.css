@@ -1,0 +1,91 @@
+/* --- GOOGLE FONTS --- */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+:root {
+    --primary-blue: #2563eb;
+    --light-bg: #f8fafc;
+    --text-slate: #1e293b;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--light-bg);
+    color: var(--text-slate);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* --- ANIMASI SMOOTH (Biar Web Kyky Store Terasa Mahal) --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-link {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* --- CUSTOM SCROLLBAR --- */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-blue);
+}
+
+/* --- BUTTON & CARD EFFECTS --- */
+.category-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-btn:hover {
+    transform: translateY(-3px);
+}
+
+.product-card {
+    transition: all 0.5s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.1);
+}
+
+/* --- WHATSAPP BUTTON PULSE --- */
+.btn-wa-pulse {
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+/* --- MODAL / SWEETALERT CUSTOM --- */
+.swal2-popup {
+    border-radius: 2.5rem !important;
+    padding: 2rem !important;
+}
+
+.swal2-confirm {
+    border-radius: 1rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+}

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keranjang Saya - Kyky Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 p-6 md:p-12"> 
+    <div class="max-w-3xl mx-auto">
+        <div class="flex items-center justify-between mb-10 px-6">
+            <div>
+                <h1 class="text-4xl font-black text-blue-600 italic tracking-tighter">Keranjang</h1>
+                <p class="text-slate-400 font-bold text-xs uppercase tracking-widest mt-1">Kyky Store Batam</p>
+            </div>
+            <a href="index.html" class="bg-white px-6 py-3 rounded-full font-bold text-sm shadow-sm hover:bg-blue-50 transition">← Kembali</a>
+        </div>
+
+        <div id="cart-items" class="mb-10 flex flex-col gap-4">
+            </div>
+
+        <div class="bg-white p-8 rounded-[3rem] shadow-2xl border border-slate-50">
+            <div class="flex justify-between items-center mb-6">
+                <p class="font-bold text-slate-400 uppercase text-xs tracking-widest">Total Bayar</p>
+                <h2 id="total-harga" class="text-3xl font-black text-blue-600 tracking-tighter">Rp 0</h2>
+            </div>
+            
+            <button onclick="checkoutWA()" class="w-full bg-green-500 text-white py-6 rounded-[2rem] font-black text-xl shadow-xl shadow-green-100 hover:scale-[1.02] transition-all flex items-center justify-center gap-3">
+                PESAN LEWAT WHATSAPP ➔
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function checkoutWA() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    if (cart.length === 0) {
+        alert("Keranjang kamu masih kosong, Bos!");
+        return;
+    }
+
+    const nomorWA = "6289523592687"; 
+    let total = 0;
+    
+    // Header pesan
+    let pesan = "Halo Kyky Store, saya mau pesan barang berikut:%0A%0A";
+
+    // Susun daftar barang
+    cart.forEach((item, index) => {
+        const hargaItem = parseInt(item.price || 0);
+        const namaItem = item.name.replace(/[^a-zA-Z0-9 ]/g, ""); // Bersihkan karakter aneh
+        pesan += `${index + 1}. *${namaItem}* - Rp ${hargaItem.toLocaleString('id-ID')}%0A`;
+        total += hargaItem;
+    });
+
+    pesan += `%0A*Total Bayar: Rp ${total.toLocaleString('id-ID')}*`;
+    pesan += `%0A%0AMohon segera diproses ya!`;
+
+    // Gunakan encodeURI agar karakter spasi dan simbol aman
+    const linkWA = `https://wa.me/${nomorWA}?text=${pesan}`;
+    
+    // Buka WhatsApp
+    window.open(linkWA, '_blank');
+}
+        // 1. Fungsi menampilkan isi keranjang
+        function renderCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('total-harga');
+            
+            if (!container) return;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-20 bg-white rounded-[3rem] border-2 border-dashed border-slate-100">
+                        <p class="text-slate-400 font-bold italic">Keranjangmu masih kosong nih... 🛒</p>
+                        <a href="index.html" class="text-blue-600 font-black underline mt-4 block uppercase text-xs">Yuk Belanja Sekarang!</a>
+                    </div>`;
+                if (totalEl) totalEl.innerText = "Rp 0";
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = cart.map((item, index) => {
+                const harga = parseInt(item.price || 0);
+                total += harga;
+                return `
+                    <div class="flex items-center justify-between bg-white p-6 rounded-[2rem] border border-slate-50 shadow-sm mb-4 animate-link">
+                        <div class="flex items-center gap-4">
+                            <img src="${item.image}" class="w-16 h-16 rounded-2xl object-cover shadow-sm">
+                            <div>
+                                <h4 class="font-bold text-slate-800 leading-tight">${item.name}</h4>
+                                <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wider mt-1">📍 ${item.location || 'Batam'}</p>
+                                <p class="text-blue-600 font-black text-lg">Rp ${harga.toLocaleString('id-ID')}</p>
+                            </div>
+                        </div>
+                        <button onclick="hapusItem(${index})" class="bg-red-50 text-red-500 p-3 rounded-xl hover:bg-red-100 transition">
+                            🗑️
+                        </button>
+                    </div>`;
+            }).join('');
+            
+            totalEl.innerText = "Rp " + total.toLocaleString('id-ID');
+        }
+
+        // 2. Fungsi hapus item satu per satu
+        function hapusItem(index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart(); // Refresh tampilan setelah hapus
+            
+            // Update juga angka di navbar (opsional)
+            if (window.opener && !window.opener.closed) {
+                window.opener.location.reload();
+            }
+        }
+
+        // 3. Fungsi Kirim ke WhatsApp
+        function checkoutWA() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            if (cart.length === 0) {
+                alert("Keranjang kamu masih kosong, Bos!");
+                return;
+            }
+
+            const nomorWA = "6289523592687"; // Nomor Kyky
+            let total = 0;
+            let daftarBarang = "Halo Kyky Store, saya mau pesan:%0A%0A";
+
+            cart.forEach((item, index) => {
+                const hargaItem = parseInt(item.price || 0);
+                daftarBarang += `${index + 1}. *${item.name}* - Rp ${hargaItem.toLocaleString('id-ID')}%0A`;
+                total += hargaItem;
+            });
+
+            daftarBarang += `%0A*Total Bayar: Rp ${total.toLocaleString('id-ID')}*`;
+
+            window.open(`https://wa.me/${nomorWA}?text=${daftarBarang}`, '_blank');
+        }
+
+        // Jalankan saat halaman dibuka
+        document.addEventListener('DOMContentLoaded', renderCart);
+    </script>
+</body>
+</html>

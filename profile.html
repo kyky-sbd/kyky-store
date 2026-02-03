@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil Saya - Kyky Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 h-screen flex items-center justify-center">
+    <div class="max-w-md w-full bg-white p-10 rounded-[3rem] shadow-2xl border border-slate-100 text-center">
+        <div class="w-24 h-24 bg-blue-600 rounded-full mx-auto flex items-center justify-center text-white text-4xl mb-6 shadow-lg shadow-blue-200">
+            👤
+        </div>
+        <h2 class="text-2xl font-black text-slate-800 italic" id="pembeli-nama">Pelanggan Kyky</h2>
+        <p class="text-blue-600 font-bold text-xs uppercase tracking-widest mt-1">Status: Pembeli Setia</p>
+        
+        <div class="mt-8 space-y-4 text-left">
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <p class="text-[10px] text-slate-400 font-bold uppercase">Lokasi Pengiriman</p>
+                <p class="font-bold text-slate-700">Batam, Kepulauan Riau</p>
+            </div>
+        </div>
+
+        <div class="mt-10 space-y-3">
+            <a href="index.html" class="block w-full bg-blue-600 text-white py-4 rounded-2xl font-black hover:bg-blue-700 transition shadow-lg">Lanjut Belanja</a>
+            <button onclick="logout()" class="block w-full border border-red-100 text-red-500 py-4 rounded-2xl font-bold hover:bg-red-50 transition">Keluar Akun</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const name = localStorage.getItem('userName');
+            if(name) document.getElementById('pembeli-nama').innerText = name;
+        });
+        function logout() {
+    // Hanya hapus data sesi login saja
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userName');
+    window.location.href = 'login.html';
+}
+    </script>
+</body>
+</html>

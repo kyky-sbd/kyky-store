@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Masuk - Kyky Store</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeInUp 0.8s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-slate-100 h-screen flex items-center justify-center font-sans overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <div class="absolute top-[-10%] left-[-10%] w-64 h-64 bg-blue-200 rounded-full blur-3xl opacity-50 animate-pulse"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-80 h-80 bg-blue-300 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+    </div>
+
+    <div class="animate-fade-in bg-white/80 backdrop-blur-xl p-10 rounded-[3rem] shadow-2xl w-[400px] text-center border border-white z-10">
+        <h2 class="text-4xl font-black text-blue-600 mb-2 italic tracking-tighter">Kyky Store</h2>
+        <p class="text-slate-400 mb-8 font-semibold italic text-sm">Silahkan Masuk Untuk Melanjutkan</p>
+        
+        <div class="space-y-4">
+            <input type="text" id="username" placeholder="Masukkan Username" 
+                class="w-full px-6 py-4 rounded-2xl bg-white border border-slate-100 outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 font-bold text-slate-600 transition-all duration-300">
+            
+            <input type="password" id="password" placeholder="Masukkan Password" 
+                class="w-full px-6 py-4 rounded-2xl bg-white border border-slate-100 outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 font-bold text-slate-600 transition-all duration-300">
+            
+            <button onclick="prosesLogin()" 
+                class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-lg hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-lg shadow-blue-200">
+                MASUK SEKARANG
+            </button>
+        </div>
+        <p class="mt-6 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">© 2026 Kyky Store</p>
+    </div>
+
+    <script>
+        // Memungkinkan login hanya dengan menekan Enter
+document.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        prosesLogin();
+    }
+});
+        function prosesLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            if (user.toLowerCase() === 'admin' && pass === '123') {
+                localStorage.setItem('userRole', 'admin');
+                localStorage.setItem('userName', 'Kyky Admin');
+                Swal.fire({
+                    title: '🚀 Akses Admin Diterima!',
+                    text: 'Selamat bekerja kembali, Kyky Store siap dikelola.',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => { window.location.href = 'index.html'; });
+            } else if (user !== "" && pass !== "") {
+                localStorage.setItem('userRole', 'pembeli');
+                localStorage.setItem('userName', user);
+                Swal.fire({
+                    title: '✨ Halo, ' + user + '!',
+                    text: 'Senang melihatmu kembali. Selamat berbelanja!',
+                    icon: 'info',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => { window.location.href = 'index.html'; });
+            } else {
+                Swal.fire({ icon: 'warning', title: 'Waduh!', text: 'Isi username & password dulu ya sayang.' });
+            }
+        }
+    </script>
+</body>
+</html>
