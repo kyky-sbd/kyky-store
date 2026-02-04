@@ -7,13 +7,18 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .category-btn { cursor: pointer; transition: all 0.3s; }
+        .product-card:hover { transform: translateY(-5px); transition: 0.3s; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen">
+
     <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-[999] border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-black text-blue-600 italic">Kyky Store</h1>
+            
             <div class="flex gap-6 items-center font-bold text-slate-600 text-sm">
                 <a href="index.html" class="hover:text-blue-600">Beranda</a>
                 
@@ -22,14 +27,14 @@
                 </div>
 
                 <div id="user-menu" class="hidden">
-                    <a href="profile.html" class="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
+                    <a href="profile.html" class="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-full hover:bg-blue-50 transition">
                         👤 Profil Saya
                     </a>
                 </div>
 
-                <button id="btn-logout" onclick="logout()" class="text-red-500 hover:font-black hidden">Keluar</button>
-                
-                <a id="btn-login-manual" href="login.html" class="hover:text-blue-600">Login</a>
+                <a id="login-link" href="login.html" class="hover:text-blue-600">Login</a>
+
+                <button id="logout-btn" onclick="logout()" class="text-red-500 hover:font-black hidden">Keluar</button>
 
                 <a href="cart.html" class="bg-blue-600 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-lg hover:scale-105 transition">
                     🛒 <span id="cart-count">0</span>
@@ -40,15 +45,16 @@
 
     <div class="max-w-7xl mx-auto px-6 mt-6">
         <div class="relative h-64 lg:h-80 rounded-[2.5rem] overflow-hidden shadow-2xl">
-            <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=2000" class="w-full h-full object-cover">
+            <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=2000" class="w-full h-full object-cover" alt="Banner">
             <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex flex-col justify-center px-12 text-white">
                 <h2 class="text-5xl font-black italic mb-2 uppercase">Kyky Big Sale!</h2>
                 <p class="text-slate-200 font-bold">Barang Berkualitas Hanya di Kyky Store.</p>
             </div>
         </div>
+        
         <div class="max-w-2xl mx-auto -mt-10 relative z-20">
             <input type="text" id="search-input" oninput="searchProduct()" placeholder="Cari barang impianmu..."
-                class="w-full bg-white shadow-2xl rounded-full py-6 px-10 outline-none border-none text-slate-600 font-bold">
+                class="w-full bg-white shadow-2xl rounded-full py-6 px-10 outline-none border-none text-slate-600 font-bold focus:ring-2 focus:ring-blue-400">
         </div>
     </div>
 
@@ -76,33 +82,32 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const role = localStorage.getItem('userRole');
-            
-            // BAGIAN YANG DIHAPUS: window.location.href ke login.html (Biar Bapak bisa langsung lihat)
+            const adminMenu = document.getElementById('admin-menu');
+            const userMenu = document.getElementById('user-menu');
+            const logoutBtn = document.getElementById('logout-btn');
+            const loginLink = document.getElementById('login-link');
 
-            // BAGIAN YANG DIRAPIKAN: Kontrol tampilan menu berdasarkan Login
+            // Kontrol Tampilan Menu (Tanpa Redirect Paksa)
             if (role === 'admin') {
-                document.getElementById('admin-menu').classList.remove('hidden');
-                document.getElementById('btn-logout').classList.remove('hidden');
-                document.getElementById('btn-login-manual').classList.add('hidden');
+                adminMenu.classList.remove('hidden');
+                logoutBtn.classList.remove('hidden');
+                loginLink.classList.add('hidden');
             } else if (role === 'user') {
-                document.getElementById('user-menu').classList.remove('hidden');
-                document.getElementById('btn-logout').classList.remove('hidden');
-                document.getElementById('btn-login-manual').classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                logoutBtn.classList.remove('hidden');
+                loginLink.classList.add('hidden');
             }
 
-            // Tetap panggil fungsi dari product.js agar barang muncul
-            if (typeof loadAndDisplay === "function") {
-                loadAndDisplay();
-            }
-            if (typeof updateCartCount === "function") {
-                updateCartCount();
-            }
+            // Inisialisasi data dari product.js
+            if (typeof loadAndDisplay === "function") loadAndDisplay();
+            if (typeof updateCartCount === "function") updateCartCount();
         });
 
         function logout() {
             localStorage.removeItem('userRole');
             localStorage.removeItem('userName');
-            location.reload(); // Hanya refresh halaman, tidak paksa ke login.html
+            // Refresh ke beranda agar status login bersih
+            window.location.href = 'index.html';
         }
     </script>
 </body>
