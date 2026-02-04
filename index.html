@@ -7,96 +7,93 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .category-btn { cursor: pointer; transition: all 0.3s; }
-        .product-card { transition: all 0.3s ease; }
-        .product-card:hover { transform: translateY(-5px); }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen">
-
-    <nav class="bg-white/90 backdrop-blur-md sticky top-0 z-[999] border-b border-slate-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-black text-blue-600 italic tracking-tighter">Kyky Store</h1>
-            
-            <div class="flex gap-4 sm:gap-6 items-center font-bold text-slate-600 text-xs sm:text-sm">
-                <a href="index.html" class="hover:text-blue-600 transition">Beranda</a>
-                
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-[999] border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-black text-blue-600 italic">Kyky Store</h1>
+            <div class="flex gap-6 items-center font-bold text-slate-600 text-sm">
+                <a href="index.html" class="hover:text-blue-600">Beranda</a>
                 <div id="admin-menu" class="hidden">
-                    <a href="dashboard-admin.html" class="text-blue-600 font-black px-2 py-1 bg-blue-50 rounded-lg">⚙️ Admin</a>
+                    <a href="dashboard-admin.html" class="text-blue-600 font-black">⚙️ Admin Panel</a>
                 </div>
-
-                <a id="nav-login" href="login.html" class="hover:text-blue-600 transition">Login</a>
-                <button id="nav-logout" onclick="logout()" class="text-red-500 hidden hover:scale-105 transition">Keluar</button>
-
-                <a href="cart.html" class="bg-blue-600 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-md hover:bg-blue-700 transition">
+                <div id="user-menu" class="hidden">
+                    <a href="profile.html" class="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
+                        👤 Profil Saya
+                    </a>
+                </div>
+                <button onclick="logout()" class="text-red-500 hover:font-black">Keluar</button>
+                <a href="cart.html" class="bg-blue-600 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-lg hover:scale-105 transition">
                     🛒 <span id="cart-count">0</span>
                 </a>
             </div>
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6">
-        <div class="relative h-48 sm:h-64 lg:h-80 rounded-[2.5rem] overflow-hidden shadow-xl">
-            <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=2000" class="w-full h-full object-cover" alt="Promo">
-            <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent flex flex-col justify-center px-8 sm:px-12 text-white">
-                <h2 class="text-3xl sm:text-5xl font-black italic mb-2 uppercase tracking-tight">Kyky Big Sale!</h2>
-                <p class="text-slate-200 font-medium text-sm sm:text-base">Kualitas Premium, Harga Minimum.</p>
+    <div class="max-w-7xl mx-auto px-6 mt-6">
+        <div class="relative h-64 lg:h-80 rounded-[2.5rem] overflow-hidden shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=2000" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex flex-col justify-center px-12 text-white">
+                <h2 class="text-5xl font-black italic mb-2 uppercase">Kyky Big Sale!</h2>
+                <p class="text-slate-200 font-bold">Barang Berkualitas Hanya di Kyky Store.</p>
             </div>
         </div>
-        
-        <div class="max-w-2xl mx-auto -mt-8 relative z-20">
+        <div class="max-w-2xl mx-auto -mt-10 relative z-20">
             <input type="text" id="search-input" oninput="searchProduct()" placeholder="Cari barang impianmu..."
-                class="w-full bg-white shadow-xl rounded-full py-4 sm:py-5 px-8 outline-none border border-slate-100 text-slate-600 font-bold focus:ring-4 focus:ring-blue-100 transition-all">
+                class="w-full bg-white shadow-2xl rounded-full py-6 px-10 outline-none border-none text-slate-600 font-bold">
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-10 flex justify-center gap-2 sm:gap-3 flex-wrap">
-        <button onclick="filterCategory('Semua', this)" class="category-btn bg-blue-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full font-bold shadow-lg">Semua</button>
-        <button onclick="filterCategory('Elektronik', this)" class="category-btn bg-white text-slate-500 border border-slate-200 px-6 sm:px-8 py-2 sm:py-3 rounded-full font-bold hover:bg-slate-50">Elektronik</button>
-        <button onclick="filterCategory('Fashion', this)" class="category-btn bg-white text-slate-500 border border-slate-200 px-6 sm:px-8 py-2 sm:py-3 rounded-full font-bold hover:bg-slate-50">Fashion</button>
-        <button onclick="filterCategory('Makanan', this)" class="category-btn bg-white text-slate-500 border border-slate-200 px-6 sm:px-8 py-2 sm:py-3 rounded-full font-bold hover:bg-slate-50">Makanan</button>
+    <div class="max-w-7xl mx-auto px-6 mt-12 flex justify-center gap-3 flex-wrap">
+        <button onclick="filterCategory('Semua', this)" class="category-btn bg-blue-600 text-white px-8 py-3 rounded-full font-bold shadow-lg">Semua</button>
+        <button onclick="filterCategory('Elektronik', this)" class="category-btn bg-white text-slate-500 border border-slate-100 px-8 py-3 rounded-full font-bold">Elektronik</button>
+        <button onclick="filterCategory('Fashion', this)" class="category-btn bg-white text-slate-500 border border-slate-100 px-8 py-3 rounded-full font-bold">Fashion</button>
+        <button onclick="filterCategory('Makanan', this)" class="category-btn bg-white text-slate-500 border border-slate-100 px-8 py-3 rounded-full font-bold">Makanan</button>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+    <div class="max-w-7xl mx-auto px-6 py-12">
         <h3 class="text-2xl font-black text-slate-800 mb-8 italic text-center">✨ Koleksi Eksklusif Kyky ✨</h3>
-        <div id="product-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            </div>
+        <div id="product-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"></div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-20 flex justify-center">
-      <select onchange="sortProducts(this.value)" class="bg-white border border-slate-200 text-slate-500 px-6 py-2 rounded-full font-bold text-xs sm:text-sm outline-none shadow-sm cursor-pointer hover:border-blue-400 transition">
+    <div class="max-w-7xl mx-auto px-6 mt-4 flex justify-center gap-2 pb-10">
+      <select onchange="sortProducts(this.value)" class="bg-white border border-slate-100 text-slate-500 px-6 py-2 rounded-full font-bold text-sm outline-none shadow-sm cursor-pointer hover:border-blue-400 transition">
         <option value="default">↕️ Urutkan Harga</option>
         <option value="low">Termurah</option>
         <option value="high">Termahal</option>
       </select>
     </div>
 
-    <script src="product.js"></script>
+    <script src="css/js/product.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const role = localStorage.getItem('userRole');
+            if (!role) {
+                window.location.href = 'login.html';
+                return;
+            }
             
-            // Mengatur tampilan menu tanpa redirect paksa
             if (role === 'admin') {
                 document.getElementById('admin-menu').classList.remove('hidden');
-                document.getElementById('nav-logout').classList.remove('hidden');
-                document.getElementById('nav-login').classList.add('hidden');
-            } else if (role === 'user') {
-                document.getElementById('nav-logout').classList.remove('hidden');
-                document.getElementById('nav-login').classList.add('hidden');
+            } else {
+                document.getElementById('user-menu').classList.remove('hidden');
             }
 
-            // Memanggil fungsi dari product.js
-            if (typeof loadAndDisplay === "function") loadAndDisplay();
-            if (typeof updateCartCount === "function") updateCartCount();
+            if (typeof loadAndDisplay === "function") {
+                loadAndDisplay();
+            }
+            // Update angka keranjang saat pertama kali masuk
+            if (typeof updateCartCount === "function") {
+                updateCartCount();
+            }
         });
 
         function logout() {
             localStorage.removeItem('userRole');
             localStorage.removeItem('userName');
-            window.location.href = 'index.html';
+            window.location.href = 'login.html';
         }
     </script>
 </body>
