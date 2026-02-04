@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <script>
-  // Script Satpam: Kalau belum login, tendang ke halaman login
-  if (!localStorage.getItem('userRole')) {
-      window.location.href = 'login.html';
-  }
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kyky Store - Beranda</title>
@@ -22,15 +16,17 @@
             <h1 class="text-2xl font-black text-blue-600 italic">Kyky Store</h1>
             <div class="flex gap-6 items-center font-bold text-slate-600 text-sm">
                 <a href="index.html" class="hover:text-blue-600">Beranda</a>
+                
                 <div id="admin-menu" class="hidden">
                     <a href="dashboard-admin.html" class="text-blue-600 font-black">⚙️ Admin Panel</a>
                 </div>
-                <div id="user-menu" class="hidden">
-                    <a href="profile.html" class="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-full hover:bg-blue-50 hover:text-blue-600 transition">
-                        👤 Profil Saya
-                    </a>
+
+                <div id="login-btn-container">
+                    <a href="login.html" class="hover:text-blue-600">Login</a>
                 </div>
-                <button onclick="logout()" class="text-red-500 hover:font-black">Keluar</button>
+
+                <button id="logout-btn" onclick="logout()" class="text-red-500 hidden hover:font-black">Keluar</button>
+
                 <a href="cart.html" class="bg-blue-600 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-lg hover:scale-105 transition">
                     🛒 <span id="cart-count">0</span>
                 </a>
@@ -64,33 +60,24 @@
         <div id="product-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"></div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-6 mt-4 flex justify-center gap-2 pb-10">
-      <select onchange="sortProducts(this.value)" class="bg-white border border-slate-100 text-slate-500 px-6 py-2 rounded-full font-bold text-sm outline-none shadow-sm cursor-pointer hover:border-blue-400 transition">
-        <option value="default">↕️ Urutkan Harga</option>
-        <option value="low">Termurah</option>
-        <option value="high">Termahal</option>
-      </select>
-    </div>
-
-    <script src="css/js/product.js"></script>
-    <script>
+    <script src="product.js"></script> <script>
         document.addEventListener('DOMContentLoaded', () => {
             const role = localStorage.getItem('userRole');
-            if (!role) {
-                window.location.href = 'login.html';
-                return;
-            }
             
+            // KONTROL TAMPILAN (Tanpa Tendang/Redirect)
             if (role === 'admin') {
                 document.getElementById('admin-menu').classList.remove('hidden');
-            } else {
-                document.getElementById('user-menu').classList.remove('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
+                document.getElementById('login-btn-container').classList.add('hidden');
+            } else if (role === 'user') {
+                document.getElementById('logout-btn').classList.remove('hidden');
+                document.getElementById('login-btn-container').classList.add('hidden');
             }
 
+            // Jalankan fungsi tampil barang
             if (typeof loadAndDisplay === "function") {
                 loadAndDisplay();
             }
-            // Update angka keranjang saat pertama kali masuk
             if (typeof updateCartCount === "function") {
                 updateCartCount();
             }
@@ -99,9 +86,8 @@
         function logout() {
             localStorage.removeItem('userRole');
             localStorage.removeItem('userName');
-            window.location.href = 'login.html';
+            location.reload(); // Cukup refresh halaman
         }
     </script>
 </body>
-
 </html>
