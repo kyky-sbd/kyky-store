@@ -7,10 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .category-btn { cursor: pointer; transition: all 0.3s; }
-        .product-card:hover { transform: translateY(-10px); transition: 0.5s; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen">
@@ -30,11 +27,9 @@
                     </a>
                 </div>
 
-                <div id="login-btn-container">
-                    <a href="login.html" class="hover:text-blue-600">Login</a>
-                </div>
-
-                <button id="logout-btn" onclick="logout()" class="text-red-500 hidden hover:font-black">Keluar</button>
+                <button id="btn-logout" onclick="logout()" class="text-red-500 hover:font-black hidden">Keluar</button>
+                
+                <a id="btn-login-manual" href="login.html" class="hover:text-blue-600">Login</a>
 
                 <a href="cart.html" class="bg-blue-600 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-lg hover:scale-105 transition">
                     🛒 <span id="cart-count">0</span>
@@ -77,25 +72,25 @@
       </select>
     </div>
 
-    <script src="product.js"></script>
-
+    <script src="css/js/product.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const role = localStorage.getItem('userRole');
             
-            // LOGIKA TAMPILAN (Tidak Menghapus Fitur, Hanya Mengatur Visibilitas)
+            // BAGIAN YANG DIHAPUS: window.location.href ke login.html (Biar Bapak bisa langsung lihat)
+
+            // BAGIAN YANG DIRAPIKAN: Kontrol tampilan menu berdasarkan Login
             if (role === 'admin') {
                 document.getElementById('admin-menu').classList.remove('hidden');
-                document.getElementById('logout-btn').classList.remove('hidden');
-                document.getElementById('login-btn-container').classList.add('hidden');
+                document.getElementById('btn-logout').classList.remove('hidden');
+                document.getElementById('btn-login-manual').classList.add('hidden');
             } else if (role === 'user') {
                 document.getElementById('user-menu').classList.remove('hidden');
-                document.getElementById('logout-btn').classList.remove('hidden');
-                document.getElementById('login-btn-container').classList.add('hidden');
+                document.getElementById('btn-logout').classList.remove('hidden');
+                document.getElementById('btn-login-manual').classList.add('hidden');
             }
-            // Jika tidak login, admin-menu & logout-btn tetap tersembunyi (hidden)
 
-            // Jalankan fungsi utama dari product.js
+            // Tetap panggil fungsi dari product.js agar barang muncul
             if (typeof loadAndDisplay === "function") {
                 loadAndDisplay();
             }
@@ -107,7 +102,7 @@
         function logout() {
             localStorage.removeItem('userRole');
             localStorage.removeItem('userName');
-            location.reload(); // Refresh untuk balik ke tampilan umum
+            location.reload(); // Hanya refresh halaman, tidak paksa ke login.html
         }
     </script>
 </body>
